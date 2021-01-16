@@ -1,0 +1,32 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 29
+        versionCode 7
+        versionName VERSION_NAME
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+}
+
+dependencies {
+    api project(':log')
+    api 'com.jakewharton.timber:timber:4.7.1'
+}
+
+afterEvaluate { project ->
+    android.libraryVariants.all { variant ->
+        tasks.androidJavadocs.doFirst {
+            classpath += configurations.compile
+        }
+    }
+}
+
+apply from: rootProject.file('gradle/gradle-bintray-push.gradle')
